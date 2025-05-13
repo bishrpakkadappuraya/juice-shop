@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juice Shop - Fresh & Healthy Juices</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config={
+            theme:{
+                extend:{
+                    colors:{
+                        primary:'#4ade80',
+                        secondary:'#fb923c'
+                    },
+                    borderRadius:{
+                        'none':'0px',
+                        'sm':'4px',
+                        DEFAULT:'8px',
+                        'md':'12px',
+                        'lg':'16px',
+                        'xl':'20px',
+                        '2xl':'24px',
+                        '3xl':'32px',
+                        'full':'9999px',
+                        'button':'8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .hero-section {
+            background-image: url('https://readdy.ai/api/search-image?query=A%20vibrant%20and%20refreshing%20scene%20of%20fresh%20fruits%20and%20juices%20arranged%20beautifully.%20Various%20colorful%20fruits%20like%20oranges%2C%20strawberries%2C%20kiwis%2C%20and%20blueberries%20surrounding%20glass%20bottles%20of%20fresh%20juice.%20The%20image%20has%20a%20bright%2C%20clean%20background%20with%20natural%20light%2C%20creating%20an%20appetizing%20and%20healthy%20atmosphere.%20The%20left%20side%20has%20a%20gradient%20to%20white%20for%20text%20overlay.&width=1600&height=800&seq=123456&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefit-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover .benefit-icon {
+            transform: scale(1.1);
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        .custom-checkbox {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 4px;
+        }
+        
+        .custom-checkbox:hover input ~ .checkmark {
+            border-color: #4ade80;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: #4ade80;
+            border-color: #4ade80;
+        }
+        
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+        
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-['Pacifico'] text-primary">Juice Shop</a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors">Products</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors">About</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors">Contact</a>
+                </nav>
+                
+                <!-- Cart Icon -->
+                <div class="flex items-center">
+                    <div class="relative mr-2 md:mr-0">
+                        <button class="p-2 rounded-full hover:bg-gray-100 transition-colors relative">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-shopping-cart-2-line text-gray-700"></i>
+                            </div>
+                            <span class="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors" id="mobileMenuButton">
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-menu-line text-gray-700"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div class="md:hidden hidden mt-4 pb-2" id="mobileMenu">
+                <nav class="flex flex-col space-y-3">
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors py-2">Home</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors py-2">Products</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors py-2">About</a>
+                    <a href="#" class="text-gray-800 font-medium hover:text-primary transition-colors py-2">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section min-h-[600px] flex items-center relative mt-16">
+        <div class="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+        <div class="container mx-auto px-4 py-20 relative z-10">
+            <div class="max-w-xl">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">Fresh & Healthy Juices</h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8">Discover our range of 100% natural, cold-pressed juices made from the finest organic fruits and vegetables.</p>
+                <button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-button font-medium shadow-lg hover:shadow-xl transition-all whitespace-nowrap">Shop Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-3">Our Popular Juices</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">Handcrafted with love and packed with nutrients, our juices are designed to boost your health and delight your taste buds.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://readdy.ai/api/search-image?query=A%20beautiful%20glass%20bottle%20of%20green%20juice%20made%20from%20kale%2C%20spinach%2C%20cucumber%2C%20and%20apple.%20The%20juice%20is%20vibrant%20green%20and%20looks%20refreshing.%20The%20bottle%20has%20a%20minimalist%20design%20and%20sits%20on%20a%20clean%20white%20surface%20with%20some%20fresh%20green%20ingredients%20scattered%20around%20it.%20Professional%20product%20photography%20with%20soft%20lighting.&width=600&height=400&seq=1001&orientation=portrait" alt="Green Detox Juice" class="w-full h-full object-cover object-top">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Green Detox</h3>
+                        <p class="text-gray-600 mb-4">Kale, spinach, cucumber, apple, and a hint of ginger.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-gray-900">$8.99</span>
+                            <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button font-medium transition-colors whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://readdy.ai/api/search-image?query=A%20beautiful%20glass%20bottle%20of%20vibrant%20orange%20juice%20made%20from%20fresh%20carrots%2C%20oranges%2C%20and%20ginger.%20The%20juice%20is%20bright%20orange%20and%20looks%20refreshing.%20The%20bottle%20has%20a%20minimalist%20design%20and%20sits%20on%20a%20clean%20white%20surface%20with%20some%20fresh%20orange%20ingredients%20scattered%20around%20it.%20Professional%20product%20photography%20with%20soft%20lighting.&width=600&height=400&seq=1002&orientation=portrait" alt="Sunrise Boost Juice" class="w-full h-full object-cover object-top">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Sunrise Boost</h3>
+                        <p class="text-gray-600 mb-4">Carrot, orange, ginger, and turmeric for immunity.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-gray-900">$7.99</span>
+                            <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button font-medium transition-colors whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="https://readdy.ai/api/search-image?query=A%20beautiful%20glass%20bottle%20of%20vibrant%20red%20juice%20made%20from%20fresh%20berries%2C%20pomegranate%2C%20and%20beets.%20The%20juice%20is%20deep%20red%20and%20looks%20refreshing.%20The%20bottle%20has%20a%20minimalist%20design%20and%20sits%20on%20a%20clean%20white%20surface%20with%20some%20fresh%20berries%20scattered%20around%20it.%20Professional%20product%20photography%20with%20soft%20lighting.&width=600&height=400&seq=1003&orientation=portrait" alt="Berry Blast Juice" class="w-full h-full object-cover object-top">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Berry Blast</h3>
+                        <p class="text-gray-600 mb-4">Strawberry, blueberry, raspberry, and pomegranate.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-gray-900">$9.49</span>
+                            <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-button font-medium transition-colors whitespace-nowrap">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors">
+                    View All Products
+                    <div class="w-5 h-5 ml-1 flex items-center justify-center">
+                        <i class="ri-arrow-right-line"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-3">Why Choose Our Juices</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">We're committed to providing you with the highest quality juices that are not only delicious but also beneficial for your health.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Benefit 1 -->
+                <div class="benefit-card bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center benefit-icon">
+                        <i class="ri-leaf-line text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">100% Organic</h3>
+                    <p class="text-gray-600">We use only certified organic fruits and vegetables, free from pesticides and harmful chemicals.</p>
+                </div>
+                
+                <!-- Benefit 2 -->
+                <div class="benefit-card bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center benefit-icon">
+                        <i class="ri-drop-line text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Cold-Pressed</h3>
+                    <p class="text-gray-600">Our cold-press technology preserves nutrients and enzymes for maximum health benefits.</p>
+                </div>
+                
+                <!-- Benefit 3 -->
+                <div class="benefit-card bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center benefit-icon">
+                        <i class="ri-truck-line text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Fast Delivery</h3>
+                    <p class="text-gray-600">We deliver your juices fresh to your doorstep within 24 hours of pressing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center bg-gray-50 rounded-lg overflow-hidden shadow-lg">
+                <div class="md:w-1/2">
+                    <img src="https://readdy.ai/api/search-image?query=A%20beautiful%20arrangement%20of%20a%20special%20juice%20cleanse%20package%20with%20multiple%20bottles%20of%20different%20colored%20juices%20%28green%2C%20orange%2C%20red%2C%20yellow%29%20arranged%20in%20a%20stylish%20box%20or%20carrier.%20The%20juices%20look%20fresh%20and%20vibrant.%20The%20image%20has%20a%20clean%2C%20bright%20background%20and%20professional%20product%20photography%20styling%20with%20soft%20lighting.&width=800&height=600&seq=1004&orientation=landscape" alt="Juice Cleanse Package" class="w-full h-full object-cover object-top">
+                </div>
+                <div class="md:w-1/2 p-8 md:p-12">
+                    <div class="inline-block px-4 py-1 bg-primary/10 text-primary font-medium rounded-full mb-4">Limited Offer</div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">3-Day Juice Cleanse Package</h2>
+                    <p class="text-gray-600 mb-6">Reset your body with our specially designed juice cleanse program. Includes 18 bottles of our premium cold-pressed juices, delivered fresh to your door.</p>
+                    <div class="flex items-center mb-6">
+                        <span class="text-3xl font-bold text-gray-900">$149.99</span>
+                        <span class="ml-3 text-lg text-gray-500 line-through">$189.99</span>
+                    </div>
+                    <button class="bg-secondary hover:bg-secondary/90 text-white px-8 py-3 rounded-button font-medium shadow-lg hover:shadow-xl transition-all whitespace-nowrap">Order Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-xl font-['Pacifico'] text-primary mb-6">Juice Shop</h3>
+                    <p class="text-gray-400 mb-6">Providing fresh, organic cold-pressed juices since 2015. Our mission is to help you live a healthier life, one sip at a time.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="ri-facebook-fill text-white"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="ri-instagram-line text-white"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="ri-twitter-x-line text-white"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="ri-pinterest-line text-white"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Products</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact Info -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Contact Us</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 mt-1 mr-3 flex-shrink-0 flex items-center justify-center">
+                                <i class="ri-map-pin-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">123 Juice Lane, Freshville, CA 94107</span>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-5 h-5 mr-3 flex-shrink-0 flex items-center justify-center">
+                                <i class="ri-phone-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-5 h-5 mr-3 flex-shrink-0 flex items-center justify-center">
+                                <i class="ri-mail-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">hello@juiceshop.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-5 h-5 mr-3 flex-shrink-0 flex items-center justify-center">
+                                <i class="ri-time-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-400">Mon-Fri: 8am-8pm, Sat-Sun: 9am-6pm</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Subscribe to Our Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Get the latest updates, offers and health tips delivered straight to your inbox.</p>
+                    <form class="mb-4">
+                        <div class="flex">
+                            <input type="email" placeholder="Your email address" class="w-full px-4 py-2 rounded-l-button focus:outline-none focus:ring-2 focus:ring-primary text-gray-900 border-none">
+                            <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-button font-medium transition-colors whitespace-nowrap">Subscribe</button>
+                        </div>
+                    </form>
+                    <label class="custom-checkbox text-gray-400 text-sm flex items-center">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="ml-2">I agree to receive marketing emails</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Payment Methods -->
+            <div class="border-t border-gray-800 pt-8 pb-4">
+                <div class="flex flex-wrap justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 Juice Shop. All rights reserved.</p>
+                    <div class="flex space-x-4">
+                        <div class="w-10 h-6 flex items-center justify-center text-gray-400">
+                            <i class="ri-visa-line text-xl"></i>
+                        </div>
+                        <div class="w-10 h-6 flex items-center justify-center text-gray-400">
+                            <i class="ri-mastercard-line text-xl"></i>
+                        </div>
+                        <div class="w-10 h-6 flex items-center justify-center text-gray-400">
+                            <i class="ri-paypal-line text-xl"></i>
+                        </div>
+                        <div class="w-10 h-6 flex items-center justify-center text-gray-400">
+                            <i class="ri-apple-fill text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                
+                // Toggle icon between menu and close
+                const icon = mobileMenuButton.querySelector('i');
+                if (icon.classList.contains('ri-menu-line')) {
+                    icon.classList.remove('ri-menu-line');
+                    icon.classList.add('ri-close-line');
+                } else {
+                    icon.classList.remove('ri-close-line');
+                    icon.classList.add('ri-menu-line');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
